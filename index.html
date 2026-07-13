@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>個人作品集｜Portfolio</title>
+  <meta name="description" content="個人作品集與專案成果展示。">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="個人作品集">
+  <meta property="og:description" content="個人作品集與專案成果展示。">
+  <meta property="og:image" content="">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="canonical" href="">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22><rect width=%2264%22 height=%2264%22 rx=%2216%22 fill=%22%235b4437%22/><text x=%2232%22 y=%2242%22 font-size=%2232%22 text-anchor=%22middle%22 fill=%22white%22>H</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700&family=Noto+Serif+TC:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav-wrap">
+      <a id="brandLink" class="brand" href="#top"><img id="siteLogo" hidden alt=""><span id="siteName">Portfolio</span></a>
+      <button id="menuButton" class="menu-button" type="button" aria-expanded="false" aria-controls="mainNav" aria-label="開啟導覽選單">☰</button>
+      <nav id="mainNav" class="main-nav" aria-label="主要導覽">
+        <a href="#about">關於我</a><a href="#skills">核心能力</a><a href="#projects">作品集</a><a href="#experience">經歷</a><a href="#education">學歷與證照</a><a href="#contact">聯絡我</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top">
+    <section id="hero" class="hero section"><div id="heroBackdrop" class="hero-backdrop"></div><div class="container hero-grid"><div class="hero-copy"><p class="eyebrow">PORTFOLIO</p><h1 id="heroName">載入中…</h1><p id="heroTitle" class="hero-title"></p><h2 id="heroTagline"></h2><p id="heroDescription" class="lead preserve-lines"></p><div class="hero-actions"><a id="heroPrimary" class="button primary" href="#projects">查看我的作品</a><a id="heroSecondary" class="button secondary" href="#contact">聯絡我</a><a id="resumeButton" class="button ghost" target="_blank" rel="noopener noreferrer" hidden>下載履歷</a></div></div><div class="hero-visual"><div id="heroPortraitPlaceholder" class="image-placeholder">個人照片</div><img id="heroPortrait" hidden alt="個人照片"></div></div></section>
+
+    <section id="about" class="section"><div class="container"><div class="section-heading"><p class="eyebrow">ABOUT</p><h2 id="aboutTitle">關於我</h2><p id="aboutSubtitle"></p></div><div class="about-grid"><div class="about-copy"><p id="aboutP1" class="preserve-lines"></p><p id="aboutP2" class="preserve-lines"></p><div id="aboutFacts" class="fact-grid"></div></div><div><img id="aboutImage" class="about-image" hidden alt="個人照片"></div></div></div></section>
+
+    <section id="skills" class="section alt"><div class="container"><div class="section-heading"><p class="eyebrow">CAPABILITIES</p><h2 id="skillsTitle">核心能力</h2></div><div id="skillsGrid" class="skills-grid"></div></div></section>
+
+    <section id="featured" class="section" hidden><div class="container"><div class="section-heading"><p class="eyebrow">FEATURED</p><h2 id="featuredTitle">精選作品</h2></div><div id="featuredGrid" class="projects-grid"></div></div></section>
+
+    <section id="projects" class="section alt"><div class="container"><div class="section-heading"><p class="eyebrow">PROJECTS</p><h2 id="projectsTitle">全部作品</h2></div><div class="project-controls"><div id="categoryFilters" class="filter-scroll" role="group" aria-label="作品分類"></div><label class="search-box"><span class="sr-only">搜尋作品</span><input id="projectSearch" type="search" placeholder="搜尋作品、角色或工具"></label></div><div id="projectsGrid" class="projects-grid"></div><p id="projectEmpty" class="empty-state" hidden>找不到符合條件的作品</p></div></section>
+
+    <section id="experience" class="section"><div class="container"><div class="section-heading"><p class="eyebrow">EXPERIENCE</p><h2 id="experienceTitle">工作／專案經歷</h2></div><div id="experienceList" class="timeline"></div></div></section>
+
+    <section id="education" class="section alt"><div class="container"><div class="section-heading"><p class="eyebrow">EDUCATION</p><h2 id="educationTitle">學歷與證照</h2></div><div class="education-grid"><div><h3>學歷</h3><div id="educationList" class="stack-list"></div></div><div><h3>證照與獎項</h3><div id="certificateList" class="stack-list"></div></div></div></div></section>
+
+    <section id="contact" class="section dark"><div class="container contact-grid"><div><p class="eyebrow">CONTACT</p><h2 id="contactTitle">聯絡我</h2><p id="contactDescription" class="preserve-lines"></p><div id="contactLinks" class="contact-links"></div></div><form id="contactForm" class="contact-form"><label>姓名<input name="name" required maxlength="80"></label><label>Email<input name="email" type="email" required maxlength="150"></label><label>聯絡主旨<input name="subject" required maxlength="150"></label><label>訊息內容<textarea name="message" required minlength="10" maxlength="3000"></textarea></label><label class="honeypot" aria-hidden="true">網站<input name="website" tabindex="-1" autocomplete="off"></label><button id="contactSubmit" class="button primary" type="submit">送出訊息</button></form></div></section>
+  </main>
+
+  <footer class="footer"><div class="container"><a id="footerAdminLink" href="admin.html"><span id="footerText">© 2026 Portfolio</span></a></div></footer>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <div id="projectModal" class="modal" hidden><div class="modal-backdrop" data-close-modal></div><article class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="modalTitle" tabindex="-1"><button id="projectModalClose" class="icon-button modal-close" type="button" aria-label="關閉作品介紹">×</button><div id="projectModalContent"></div></article></div>
+  <div id="lightbox" class="lightbox" hidden><div class="lightbox-backdrop" data-close-lightbox></div><div class="lightbox-panel" role="dialog" aria-modal="true" aria-label="作品圖片預覽"><button id="lightboxClose" class="icon-button" aria-label="關閉圖片">×</button><button id="lightboxPrev" class="lightbox-nav prev" aria-label="上一張">‹</button><img id="lightboxImage" alt=""><button id="lightboxNext" class="lightbox-nav next" aria-label="下一張">›</button><p id="lightboxCaption"></p><p id="lightboxCount"></p></div></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="config.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

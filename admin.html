@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>作品集管理後台</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700&family=Noto+Serif+TC:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+  <section id="authView" class="auth-view">
+    <form id="loginForm" class="auth-card"><p class="eyebrow">PORTFOLIO CMS</p><h1>管理員登入</h1><label>Email<input id="loginEmail" type="email" required autocomplete="email"></label><label>密碼<span class="password-wrap"><input id="loginPassword" type="password" required minlength="8" autocomplete="current-password"><button id="toggleLoginPassword" type="button" aria-label="顯示密碼">顯示</button></span></label><button id="loginButton" class="button primary" type="submit">登入</button><button id="registerButton" class="button ghost" type="button">註冊帳號</button><button id="forgotButton" class="text-button" type="button">忘記密碼</button><a class="text-button" href="index.html">返回前台</a><p id="authMessage" class="form-message"></p></form>
+  </section>
+
+  <div id="adminView" hidden>
+    <header class="admin-header"><div><strong>Portfolio CMS</strong><span id="adminEmail"></span></div><div><a class="button ghost small" href="index.html" target="_blank" rel="noopener noreferrer">查看前台</a><button id="logoutButton" class="button secondary small">登出</button></div></header>
+    <div class="admin-layout">
+      <nav id="adminTabs" class="admin-tabs" aria-label="後台功能"><button class="tab active" data-tab="projects">作品管理</button><button class="tab" data-tab="profile">個人資料</button><button class="tab" data-tab="skills">核心能力</button><button class="tab" data-tab="experiences">經歷管理</button><button class="tab" data-tab="education">學歷管理</button><button class="tab" data-tab="certificates">證照與獎項</button><button class="tab" data-tab="contacts">聯絡方式</button><button class="tab" data-tab="messages">聯絡訊息</button><button class="tab" data-tab="settings">網站設定</button></nav>
+      <main class="admin-main">
+        <section class="tab-panel active" data-panel="projects"><div class="panel-heading"><div><p class="eyebrow">PROJECTS</p><h1>作品管理</h1></div><button class="button primary" data-create="projects">新增作品</button></div><div class="subtools"><button class="button ghost small" data-manager="categories">管理分類</button><button class="button ghost small" data-manager="tools">管理工具</button></div><div id="projectsList" class="admin-list"></div></section>
+        <section class="tab-panel" data-panel="profile"><div class="panel-heading"><div><p class="eyebrow">PROFILE</p><h1>個人資料</h1></div></div><form id="profileForm" class="form-card settings-form"></form></section>
+        <section class="tab-panel" data-panel="skills"><div class="panel-heading"><h1>核心能力</h1><button class="button primary" data-create="skills">新增能力</button></div><div id="skillsList" class="admin-list"></div></section>
+        <section class="tab-panel" data-panel="experiences"><div class="panel-heading"><h1>經歷管理</h1><button class="button primary" data-create="experiences">新增經歷</button></div><div id="experiencesList" class="admin-list"></div></section>
+        <section class="tab-panel" data-panel="education"><div class="panel-heading"><h1>學歷管理</h1><button class="button primary" data-create="education">新增學歷</button></div><div id="educationList" class="admin-list"></div></section>
+        <section class="tab-panel" data-panel="certificates"><div class="panel-heading"><h1>證照與獎項</h1><button class="button primary" data-create="certificates">新增資料</button></div><div id="certificatesList" class="admin-list"></div></section>
+        <section class="tab-panel" data-panel="contacts"><div class="panel-heading"><h1>聯絡方式</h1><button class="button primary" data-create="contact_links">新增聯絡方式</button></div><div id="contactLinksList" class="admin-list"></div></section>
+        <section class="tab-panel" data-panel="messages"><div class="panel-heading"><h1>聯絡訊息</h1><button id="refreshMessages" class="button ghost">重新整理</button></div><div id="messagesList" class="admin-list"></div></section>
+        <section class="tab-panel" data-panel="settings"><div class="panel-heading"><h1>網站設定</h1></div><form id="settingsForm" class="form-card settings-form"></form><div id="imageSettings" class="image-settings"></div></section>
+      </main>
+    </div>
+  </div>
+
+  <div id="editorModal" class="modal" hidden><div class="modal-backdrop" data-close-editor></div><div class="editor-panel" role="dialog" aria-modal="true" aria-labelledby="editorTitle"><header class="editor-header"><h2 id="editorTitle">編輯</h2><button id="editorClose" class="icon-button" aria-label="關閉">×</button></header><form id="editorForm" class="editor-body"></form><footer class="editor-footer"><button id="deleteButton" class="button danger" type="button" hidden>刪除</button><button id="saveButton" class="button primary" type="submit" form="editorForm">儲存</button></footer></div></div>
+  <div id="managerModal" class="modal" hidden><div class="modal-backdrop" data-close-manager></div><div class="manager-panel" role="dialog" aria-modal="true"><header class="editor-header"><h2 id="managerTitle">管理選項</h2><button id="managerClose" class="icon-button" aria-label="關閉">×</button></header><form id="managerAddForm" class="manager-add"><input id="managerName" required placeholder="輸入名稱"><button class="button primary">新增</button></form><div id="managerList" class="admin-list compact"></div></div></div>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.6/Sortable.min.js"></script>
+  <script src="config.js"></script><script src="admin.js"></script>
+</body>
+</html>
