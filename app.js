@@ -107,6 +107,24 @@
     }
   }
 
+  function renderResumeUpdated(value, hasResume) {
+    const actions = $("resumeButton")?.parentElement;
+    if (!actions) return;
+    let note = $("resumeUpdated");
+    if (!note) {
+      note = make("span", "resume-updated");
+      note.id = "resumeUpdated";
+      actions.append(note);
+    }
+    if (!hasResume || !value) { note.hidden = true; return; }
+    const date = new Date(value);
+    const display = Number.isNaN(date.getTime()) ? String(value) : new Intl.DateTimeFormat("zh-TW", {
+      timeZone: "Asia/Taipei", year: "numeric", month: "2-digit", day: "2-digit"
+    }).format(date);
+    note.textContent = `履歷更新：${display}`;
+    note.hidden = false;
+  }
+
   function renderSettings() {
     const get = key => settings[key] || "";
     text("siteName", get("site_name") || "Portfolio");
@@ -136,6 +154,7 @@
     configureButton("heroPrimary", get("hero_primary_button_text"), get("hero_primary_button_url"), get("hero_primary_button_visible") !== "false");
     configureButton("heroSecondary", get("hero_secondary_button_text"), get("hero_secondary_button_url"), get("hero_secondary_button_visible") !== "false");
     configureButton("resumeButton", get("resume_button_text") || "下載履歷", get("resume_url"), Boolean(get("resume_url")));
+    renderResumeUpdated(get("resume_last_updated"), Boolean(get("resume_url")));
 
     const facts = [["所在地", get("location")], ["目前身份", get("current_status")], ["專業方向", get("professional_direction")], ["可合作項目", get("collaboration_items")]];
     const factGrid = $("aboutFacts");

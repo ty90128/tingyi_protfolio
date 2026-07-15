@@ -296,3 +296,7 @@ node --check reset-password.js
 - 另提供 `localStorage storage` 事件作為相容性備援。
 - 後台登入憑證改存於 `sessionStorage`：同一個管理頁籤重新整理時仍保持登入；關閉該頁籤後憑證會被瀏覽器清除，再次開啟 `admin.html` 必須重新登入。
 - 若同時開啟多個管理頁籤，每個頁籤有各自的登入狀態。
+
+
+### 履歷更新時間
+履歷最後更新時間會在 PDF 上傳成功後自動記錄（以 Asia/Taipei 顯示），不需要手動輸入。

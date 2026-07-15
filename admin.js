@@ -250,9 +250,24 @@
   function renderManagerList() { const items = currentManager === "categories" ? projectCategories : toolOptions; const table = currentManager === "categories" ? "project_category_options" : "tool_options"; const list = $("managerList"); list.replaceChildren(...items.map(item => { const card = make("article", "admin-card simple"); card.dataset.id = item.id; card.dataset.table = table; const handle = make("button", "drag-handle", "☰"); handle.type = "button"; const info = make("div", "card-info"); info.append(make("h3", "", item.name), make("p", "", `排序 ${item.sort_order} · ${item.is_active ? "啟用" : "停用"}`)); const actions = make("div", "card-actions"); actions.append(actionButton("改名", "rename-option", item.id), actionButton(item.is_active ? "停用" : "啟用", "toggle-option", item.id), actionButton("刪除", "delete-option", item.id)); card.append(handle, info, actions); return card; })); }
   async function addManagerOption(event) { event.preventDefault(); const name = $("managerName").value.trim(); if (!name) return; const table = currentManager === "categories" ? "project_category_options" : "tool_options"; const items = currentManager === "categories" ? projectCategories : toolOptions; try { await mutation(supabaseClient.from(table).insert({ name, sort_order: items.length + 1, is_active: true })); $("managerName").value = ""; await loadAllData(); renderManagerList(); toast("選項已新增"); } catch (error) { alert(error.message); } }
 
+  function formatTaipeiDateTime(value) {
+    if (!value) return "";
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) return String(value);
+    return new Intl.DateTimeFormat("zh-TW", {
+      timeZone: "Asia/Taipei",
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false
+    }).format(date);
+  }
+
   function renderSettingsForms() {
     renderKeyValueForm("profileForm", [
-      ["hero_name", "姓名"], ["hero_title", "個人職稱"], ["hero_tagline", "核心標語", "textarea", "wide"], ["hero_description", "Hero 簡短說明", "textarea", "wide"], ["about_title", "關於我標題"], ["about_subtitle", "關於我副標題"], ["about_paragraph_1", "第一段介紹", "textarea", "wide"], ["about_paragraph_2", "第二段介紹", "textarea", "wide"], ["location", "所在地"], ["current_status", "目前身份"], ["professional_direction", "專業方向", "textarea"], ["collaboration_items", "可合作項目", "textarea"], ["resume_button_text", "履歷按鈕文字"], ["resume_last_updated", "履歷最後更新日期"]
+      ["hero_name", "姓名"], ["hero_title", "個人職稱"], ["hero_tagline", "核心標語", "textarea", "wide"], ["hero_description", "Hero 簡短說明", "textarea", "wide"], ["about_title", "關於我標題"], ["about_subtitle", "關於我副標題"], ["about_paragraph_1", "第一段介紹", "textarea", "wide"], ["about_paragraph_2", "第二段介紹", "textarea", "wide"], ["location", "所在地"], ["current_status", "目前身份"], ["professional_direction", "專業方向", "textarea"], ["collaboration_items", "可合作項目", "textarea"], ["resume_button_text", "履歷按鈕文字"]
     ], "儲存個人資料");
     renderKeyValueForm("settingsForm", [
       ["site_name", "網站名稱"], ["hero_primary_button_text", "主要按鈕文字"], ["hero_primary_button_url", "主要按鈕連結"], ["hero_secondary_button_text", "次要按鈕文字"], ["hero_secondary_button_url", "次要按鈕連結"], ["skills_section_title", "核心能力區標題"], ["featured_projects_title", "精選作品區標題"], ["projects_section_title", "全部作品區標題"], ["experience_section_title", "經歷區標題"], ["education_section_title", "學歷區標題"], ["certificate_section_title", "證照區標題"], ["contact_section_title", "聯絡區標題"], ["contact_section_description", "聯絡區說明", "textarea", "wide"], ["footer_text", "Footer 文字", "textarea", "wide"], ["seo_title", "SEO 標題", "text", "wide"], ["seo_description", "SEO 描述", "textarea", "wide"]
@@ -260,9 +275,34 @@
     renderImageSettings();
   }
   function renderKeyValueForm(formId, fields, buttonText) { const form = $(formId); if (!form) return; form.replaceChildren(...fields.map(([key, label, type = "text", className = ""]) => createInput(field(key, label, type, false, className), siteSettings[key] || ""))); const button = make("button", "button primary", buttonText); button.type = "submit"; form.append(button); }
-  function renderImageSettings() { const wrap = $("imageSettings"); if (!wrap) return; const items = [["site_logo_url", "網站 Logo", "site/logo", ["image/jpeg", "image/png", "image/webp"], 8], ["hero_image_url", "Hero 背景", "site/hero", ["image/jpeg", "image/png", "image/webp"], 8], ["profile_image_url", "個人照片", "profile", ["image/jpeg", "image/png", "image/webp"], 8], ["og_image_url", "Open Graph 分享圖片", "site/og", ["image/jpeg", "image/png", "image/webp"], 8], ["resume_url", "履歷 PDF", "documents/resume", ["application/pdf"], 15]]; wrap.replaceChildren(...items.map(([key, title, folder, types, max]) => { const card = make("article", "image-card"); card.append(make("h3", "", title)); if (safeUrl(siteSettings[key])) { if (key === "resume_url") { const link = make("a", "button ghost", "查看目前檔案"); link.href = safeUrl(siteSettings[key]); link.target = "_blank"; card.append(link); } else { const img = make("img"); img.src = safeUrl(siteSettings[key]); img.alt = title; card.append(img); } } else card.append(make("p", "", "尚未上傳")); const input = document.createElement("input"); input.type = "file"; input.accept = types.join(","); const button = make("button", "button primary", "選擇檔案後儲存"); button.type = "button"; button.dataset.imageKey = key; button.dataset.folder = folder; button.dataset.types = types.join(","); button.dataset.max = String(max); card.append(input, button); button.addEventListener("click", () => saveImageSetting(button, input)); return card; })); }
+  function renderImageSettings() { const wrap = $("imageSettings"); if (!wrap) return; const items = [["site_logo_url", "網站 Logo", "site/logo", ["image/jpeg", "image/png", "image/webp"], 8], ["hero_image_url", "Hero 背景", "site/hero", ["image/jpeg", "image/png", "image/webp"], 8], ["profile_image_url", "個人照片", "profile", ["image/jpeg", "image/png", "image/webp"], 8], ["og_image_url", "Open Graph 分享圖片", "site/og", ["image/jpeg", "image/png", "image/webp"], 8], ["resume_url", "履歷 PDF", "documents/resume", ["application/pdf"], 15]]; wrap.replaceChildren(...items.map(([key, title, folder, types, max]) => { const card = make("article", "image-card"); card.append(make("h3", "", title)); if (safeUrl(siteSettings[key])) { if (key === "resume_url") { const link = make("a", "button ghost", "查看目前檔案"); link.href = safeUrl(siteSettings[key]); link.target = "_blank"; link.rel = "noopener noreferrer"; card.append(link); const updated = formatTaipeiDateTime(siteSettings.resume_last_updated); if (updated) card.append(make("p", "setting-note", `最後更新：${updated}`)); } else { const img = make("img"); img.src = safeUrl(siteSettings[key]); img.alt = title; card.append(img); } } else card.append(make("p", "", "尚未上傳")); const input = document.createElement("input"); input.type = "file"; input.accept = types.join(","); const button = make("button", "button primary", "選擇檔案後儲存"); button.type = "button"; button.dataset.imageKey = key; button.dataset.folder = folder; button.dataset.types = types.join(","); button.dataset.max = String(max); card.append(input, button); button.addEventListener("click", () => saveImageSetting(button, input)); return card; })); }
   async function saveSettingsForm(event) { event.preventDefault(); const rows = [...new FormData(event.currentTarget).entries()].map(([key, value]) => ({ key, value: String(value).trim() })); const button = event.currentTarget.querySelector('button[type="submit"]'); const original = button.textContent; try { button.disabled = true; button.textContent = "儲存中…"; await mutation(supabaseClient.from("site_settings").upsert(rows, { onConflict: "key" })); await loadAllData(); toast("設定已儲存"); } catch (error) { alert(error.message); } finally { button.disabled = false; button.textContent = original; } }
-  async function saveImageSetting(button, input) { const file = input.files?.[0]; if (!file) { alert("請先選擇檔案"); return; } const types = button.dataset.types.split(","); const max = Number(button.dataset.max); try { validateFile(file, types, max); const original = button.textContent; button.disabled = true; button.textContent = "上傳中…"; const url = await uploadFile(file, button.dataset.folder); await mutation(supabaseClient.from("site_settings").upsert({ key: button.dataset.imageKey, value: url }, { onConflict: "key" })); await loadAllData(); toast("檔案上傳完成"); button.textContent = original; button.disabled = false; } catch (error) { console.error(error); alert(error.message); button.disabled = false; button.textContent = "選擇檔案後儲存"; } }
+  async function saveImageSetting(button, input) {
+    const file = input.files?.[0];
+    if (!file) { alert("請先選擇檔案"); return; }
+    const types = button.dataset.types.split(",");
+    const max = Number(button.dataset.max);
+    const original = button.textContent;
+    try {
+      validateFile(file, types, max);
+      button.disabled = true;
+      button.textContent = "上傳中…";
+      const url = await uploadFile(file, button.dataset.folder);
+      const rows = [{ key: button.dataset.imageKey, value: url }];
+      if (button.dataset.imageKey === "resume_url") {
+        rows.push({ key: "resume_last_updated", value: new Date().toISOString() });
+      }
+      await mutation(supabaseClient.from("site_settings").upsert(rows, { onConflict: "key" }));
+      await loadAllData();
+      toast(button.dataset.imageKey === "resume_url" ? "履歷已上傳，更新時間已自動記錄" : "檔案上傳完成");
+    } catch (error) {
+      console.error(error);
+      alert(error.message);
+    } finally {
+      button.disabled = false;
+      button.textContent = original;
+    }
+  }
 
   function initSortables() {
     if (!window.Sortable) return;
